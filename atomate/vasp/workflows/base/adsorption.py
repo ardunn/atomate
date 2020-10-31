@@ -195,8 +195,8 @@ def get_slab_trans_params(slab):
 
 
 def get_wf_slab(slab, include_bulk_opt=False, adsorbates=None,
-                ads_structures_params=None, ads_site_finder_params=None,vasp_cmd="vasp",
-                handler_group="md",db_file=None, add_molecules_in_box=False,
+                ads_structures_params=None, ads_site_finder_params=None, vasp_cmd=VASP_CMD,
+                handler_group="md", db_file=DB_FILE, add_molecules_in_box=False,
                 user_incar_settings=None):
     """
     Gets a workflow corresponding to a slab calculation along with optional
@@ -275,7 +275,8 @@ def get_wf_slab(slab, include_bulk_opt=False, adsorbates=None,
     if add_molecules_in_box:
         molecule_wf = get_wf_molecules(adsorbates, db_file=db_file,
                                        vasp_cmd=vasp_cmd)
-        wf.append_wf(molecule_wf)
+        parent = wf.fws[-1]
+        wf.append_wf(molecule_wf, [parent.fw_id])
 
     return wf
 
